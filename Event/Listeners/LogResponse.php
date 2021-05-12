@@ -122,7 +122,7 @@ final class LogResponse implements OnKernelResponseHandlerInterface
      */
     private function getTime(Request $request): float
     {
-        if (!$request->server) {
+        if (count($request->server->all()) === 0) {
             return 0;
         }
 
@@ -132,7 +132,7 @@ final class LogResponse implements OnKernelResponseHandlerInterface
         );
         $time = microtime(true) - $startTime;
 
-        return (float)round($time * 1000);
+        return round($time * 1000);
     }
 
     /**

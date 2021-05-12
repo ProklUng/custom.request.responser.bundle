@@ -24,6 +24,7 @@ class Bridge extends PageSpeedMiddlewares
      */
     public function handleEvent(string &$content) : void
     {
+        /** @psalm-suppress UndefinedClass */
         $request = Context::getCurrent()->getRequest();
         if ($request->isAdminSection()) {
             return;

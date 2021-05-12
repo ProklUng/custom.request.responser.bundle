@@ -37,20 +37,16 @@ class CompressHtmlResponse implements OnKernelResponseHandlerInterface
 
         $response = $event->getResponse();
 
-        $contentType = $response->headers->get('content-type');
-
-        if (is_array($contentType)) {
-            $contentType = reset($contentType);
-        }
+        $contentType = $response->headers->get('content-type', '');
 
         if (get_class($response) === Response::class
-            && ($contentType === null || strpos($contentType, 'text/html') === 0)
+            && ($contentType && strpos($contentType, 'text/html') === 0)
         ) {
             $response->setContent(
                 trim(preg_replace('/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/',
                     PHP_EOL,
                     preg_replace('/\h+/u', ' ',
-                        $response->getContent())))
+                        (string)$response->getContent())))
             );
         }
     }

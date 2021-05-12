@@ -93,7 +93,7 @@ class PageSpeedMiddlewares implements OnKernelResponseHandlerInterface
                 continue;
             }
 
-            $content = $response->getContent();
+            $content = (string)$response->getContent();
             $content = $middleware->apply($content);
             $response->setContent($content);
         }
@@ -148,6 +148,7 @@ class PageSpeedMiddlewares implements OnKernelResponseHandlerInterface
             if ($disableParam === true && $this->container->has($key)) {
                 /** @var AbstractPageSpeed $service */
                 $service = $this->container->get($key);
+                /** @psalm-suppress RedundantConditionGivenDocblockType */
                 if ($service !== null) {
                     foreach ($this->middlewaresBag as $keyMiddleware => $middleware) {
                         if ($middleware === $service) {

@@ -23,12 +23,14 @@ class InsertDNSPrefetch extends AbstractPageSpeed
             PREG_OFFSET_CAPTURE
         );
 
-        $dnsPrefetch = collect($matches[0])->map(function ($item) {
-            $domain = (new TrimUrl)->apply($item[0]);
-            $domain = explode(
+        $dnsPrefetch = collect($matches[0])->map(
+            /** @var mixed $item */
+            function ($item) {
+                $domain = (new TrimUrl)->apply($item[0]);
+                $domain = explode(
                 '/',
-                str_replace('//', '', $domain)
-            );
+                    str_replace('//', '', $domain)
+                );
 
             return "<link rel=\"dns-prefetch\" href=\"//{$domain[0]}\">";
         })->unique()->implode("\n");

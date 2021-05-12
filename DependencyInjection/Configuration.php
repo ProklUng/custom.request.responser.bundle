@@ -22,8 +22,6 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('custom_request_responser');
         $rootNode    = $treeBuilder->getRootNode();
 
-        \assert($rootNode instanceof ArrayNodeDefinition);
-
         $rootNode
             ->children()
             ->arrayNode('defaults')

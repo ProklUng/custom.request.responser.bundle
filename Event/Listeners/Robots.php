@@ -46,6 +46,7 @@ final class Robots implements OnKernelResponseHandlerInterface
             return $value !== true;
         }
 
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (is_string($value) && $this->container !== null && $this->container->has($value)) {
             /** @var IndexRouteManagerInterface $service */
             $service = $this->container->get($value);

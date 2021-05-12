@@ -2,6 +2,8 @@
 
 namespace Prokl\CustomRequestResponserBundle\Services\PageSpeed;
 
+use Illuminate\Support\Collection;
+
 /**
  * Class InlineCss
  * @package Prokl\CustomRequestResponserBundle\Services\PageSpeed
@@ -18,7 +20,7 @@ class InlineCss extends AbstractPageSpeed
     private $html = '';
 
     /**
-     * @var array $class
+     * @var Collection|array $class
      */
     private $class = [];
 
@@ -46,9 +48,10 @@ class InlineCss extends AbstractPageSpeed
             PREG_OFFSET_CAPTURE
         );
 
-        $this->class = collect($matches[1])->mapWithKeys(function ($item) {
-
-            return [ 'page_speed_'.mt_rand() => $item[0] ];
+        $this->class = collect($matches[1])->mapWithKeys(
+            /** @var mixed $item */
+            function ($item) {
+                return [ 'page_speed_'.mt_rand() => $item[0] ];
         })->unique();
 
         return $this->injectStyle()->injectClass()->fixHTML()->html;
@@ -59,14 +62,19 @@ class InlineCss extends AbstractPageSpeed
      */
     private function injectStyle(): InlineCss
     {
-        collect($this->class)->each(function ($attributes, $class) {
+        collect($this->class)->each(
+            /**
+             * @var mixed  $attributes
+             * @var string $class
+             */
+            function ($attributes, $class) {
+                $this->inline[] = ".{$class}{ {$attributes} }";
 
-            $this->inline[] = ".{$class}{ {$attributes} }";
-
-            $this->style[] = [
-                'class' => $class,
-                'attributes' => preg_quote($attributes, '/')];
-        });
+                $this->style[] = [
+                    'class' => $class,
+                    'attributes' => preg_quote($attributes, '/'),
+                ];
+            });
 
         $injectStyle = implode(' ', $this->inline);
 
@@ -84,10 +92,12 @@ class InlineCss extends AbstractPageSpeed
      */
     private function injectClass(): InlineCss
     {
-        collect($this->style)->each(function ($item) {
-            $replace = [
-                '/style="'.$item['attributes'].'"/' => "class=\"{$item['class']}\"",
-            ];
+        collect($this->style)->each(
+            /** @var array $item */
+            function (array $item) {
+                $replace = [
+                    '/style="'.$item['attributes'].'"/' => "class=\"{$item['class']}\"",
+                ];
 
             $this->html = $this->replace($replace, $this->html);
         });
