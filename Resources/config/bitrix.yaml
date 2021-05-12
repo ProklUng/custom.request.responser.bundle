@@ -1,0 +1,17 @@
+services:
+  # конфигурация по умолчанию в *этом* файле
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  # Подвязка middlewares PageSpeed на битриксовые роуты.
+  custom_request_responser.pagespeed_middlewares_bitrix_bridge:
+    class: Prokl\CustomRequestResponserBundle\Services\BitrixEventBridge\Bridge
+    arguments:
+      - '@service_container'
+      - '%custom_request_responser%'
+      - 'bitrix_middlewares_disabled'
+      - !tagged_iterator response.middleware
+    tags:
+      - { name: bitrix.events.init, module: main, event: OnEndBufferContent, method: handleEvent, sort: 1 }
