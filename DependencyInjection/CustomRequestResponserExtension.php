@@ -52,6 +52,7 @@ class CustomRequestResponserExtension extends Extension
 
         $loader->load('services.yaml');
         $loader->load('listeners.yaml');
+        $loader->load('middlewares.yaml');
 
         if (defined('B_PROLOG_INCLUDED') && B_PROLOG_INCLUDED === true) {
             $loader->load('bitrix.yaml');

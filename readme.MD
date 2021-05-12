@@ -76,6 +76,8 @@ custom_request_responser:
 - `custom_request_responser.middleware.elide_attributes` - removing attributes from tags when the specified value is equal to the default value
 - `custom_request_responser.middleware.inline_css` - transforms the inline "style" attribute of tags into classes by moving the CSS to the header
 
+Помечаются тэгом `response.middleware` и должны наследоваться от `AbstractPageSpeed`.
+
 ### Пример кастомного обработчика - нужно ли индексировать роут или нет
 
 ```php

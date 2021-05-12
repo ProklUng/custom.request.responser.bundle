@@ -5,8 +5,6 @@ services:
     autoconfigure: true
     public: true
 
-  Symfony\Component\ExpressionLanguage\ExpressionLanguage: ~
-
   custom_request_responser.set.headers:
     class: Prokl\CustomRequestResponserBundle\Event\Listeners\SetHeaders
     arguments: ['@Symfony\Component\ExpressionLanguage\ExpressionLanguage', '%custom_request_responser%']
